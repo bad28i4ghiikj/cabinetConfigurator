@@ -8,11 +8,15 @@ import com.example.cabinetconfigurator.data.local.QuoteDao
 import com.example.cabinetconfigurator.data.local.QuoteEntity
 import com.example.cabinetconfigurator.data.local.QuotePricingSnapshotEntity
 import com.example.cabinetconfigurator.data.local.QuoteZoneEntity
+import com.example.cabinetconfigurator.domain.model.Accessory
+import com.example.cabinetconfigurator.domain.model.AccessoryType
 import com.example.cabinetconfigurator.domain.model.ParameterDefinition
 import com.example.cabinetconfigurator.domain.model.PricingProfile
 import com.example.cabinetconfigurator.domain.model.Quote
 import com.example.cabinetconfigurator.domain.model.QuoteCalculationResult
 import com.example.cabinetconfigurator.domain.model.QuoteDraft
+import com.example.cabinetconfigurator.domain.model.FurnitureElement
+import com.example.cabinetconfigurator.domain.model.FurniturePiece
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
@@ -91,9 +95,10 @@ class QuoteRepository(private val dao: QuoteDao) {
             piece.elements.mapIndexed { eIdx, element ->
                 QuoteZoneEntity(
                     quoteId = quoteId,
-                    name = "${piece.widthMm}x${piece.heightMm} - ${element.type}",
+                    name = "${piece.widthMm}x${piece.heightMm}x${piece.depthMm} - ${element.type}",
                     orderIndex = pIdx * 100 + eIdx,
-                    quantity = element.quantity
+                    quantity = element.quantity,
+                    accessoriesJson = element.accessories.toJson()
                 )
             }
         }
@@ -104,6 +109,34 @@ class QuoteRepository(private val dao: QuoteDao) {
 
     fun observeHistory(): Flow<List<Quote>> = dao.observeAllQuotes().map { list ->
         list.map { agg ->
+            val elementsByPiece = agg.zones.groupBy { it.orderIndex / 100 }
+            val furniture = if (agg.zones.isNotEmpty()) {
+                elementsByPiece.entries.sortedBy { it.key }.map { (_, zones) ->
+                    val firstParts = zones.firstOrNull()?.name?.split(" - ")?.getOrNull(0)?.trim()
+                    val dims = firstParts?.split("x")?.mapNotNull { it.toIntOrNull() }
+                    val w = dims?.getOrNull(0) ?: agg.quote.widthMm
+                    val h = dims?.getOrNull(1) ?: agg.quote.heightMm
+                    val d = dims?.getOrNull(2) ?: agg.quote.depthMm
+                    val elements = zones.mapNotNull { zone ->
+                        val parts = zone.name.split(" - ").map { it.trim() }
+                        if (parts.size >= 2) {
+                            val elementType = when (parts[1]) {
+                                "FRONT"  -> com.example.cabinetconfigurator.domain.model.ElementType.FRONT
+                                "DRAWER" -> com.example.cabinetconfigurator.domain.model.ElementType.DRAWER
+                                else     -> null
+                            }
+                            elementType?.let {
+                                FurnitureElement(
+                                    type = it,
+                                    quantity = zone.quantity,
+                                    accessories = zone.accessoriesJson.toAccessoryList()
+                                )
+                            }
+                        } else null
+                    }
+                    FurniturePiece(widthMm = w, heightMm = h, depthMm = d, elements = elements)
+                }
+            } else emptyList()
             Quote(
                 id = agg.quote.id,
                 name = agg.quote.name,
@@ -115,8 +148,13 @@ class QuoteRepository(private val dao: QuoteDao) {
                 totalNet = agg.quote.totalNet,
                 totalGross = agg.quote.totalGross,
                 createdAt = agg.quote.createdAt,
-                pricingSnapshot = agg.pricingSnapshot.associate { it.parameterKey to it.value }
+                pricingSnapshot = agg.pricingSnapshot.associate { it.parameterKey to it.value },
+                furniture = furniture
             )
         }
+    }
+
+    suspend fun deleteQuote(quoteId: Long) {
+        dao.deleteQuote(quoteId)
     }
 }

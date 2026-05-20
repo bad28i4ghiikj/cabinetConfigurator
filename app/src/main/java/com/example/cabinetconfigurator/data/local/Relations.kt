@@ -16,3 +16,9 @@ data class QuoteAggregate(
     @Relation(parentColumn = "id", entityColumn = "quoteId")
     val pricingSnapshot: List<QuotePricingSnapshotEntity>
 )
+
+data class CabinetTemplateWithElements(
+    @Embedded val template: CabinetTemplateEntity,
+    @Relation(parentColumn = "id", entityColumn = "templateId")
+    val elements: List<CabinetTemplateElementEntity>
+)
