@@ -329,6 +329,7 @@ class AppViewModel(private val module: AppModule) : ViewModel() {
     fun addFurniturePieceFromTemplate(templateId: Long) {
         val template = _uiState.value.templateCatalog.find { it.id == templateId } ?: return
         val piece = FurniturePiece(
+            name = template.name,
             widthMm = template.widthMm,
             heightMm = template.heightMm,
             depthMm = template.depthMm,
@@ -356,6 +357,14 @@ class AppViewModel(private val module: AppModule) : ViewModel() {
         _uiState.value = _uiState.value.copy(
             furniture = _uiState.value.furniture.map {
                 if (it.id == pieceId) it.copy(cabinetType = type) else it
+            }
+        )
+    }
+
+    fun updateFurnitureName(pieceId: String, name: String) {
+        _uiState.value = _uiState.value.copy(
+            furniture = _uiState.value.furniture.map {
+                if (it.id == pieceId) it.copy(name = name) else it
             }
         )
     }

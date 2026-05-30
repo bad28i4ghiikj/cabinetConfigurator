@@ -86,6 +86,7 @@ enum class CabinetType(val displayName: String) {
 
 data class FurniturePiece(
     val id: String = UUID.randomUUID().toString(),
+    val name: String = "",
     val cabinetType: CabinetType = CabinetType.BASE,
     val widthMm: Int = 600,
     val heightMm: Int = 720,

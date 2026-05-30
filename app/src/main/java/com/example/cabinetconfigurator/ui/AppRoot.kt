@@ -28,6 +28,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.PictureAsPdf
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -464,46 +466,78 @@ private fun TemplateEditorDialog(state: AppUiState, vm: AppViewModel) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun FurniturePieceCard(piece: FurniturePiece, vm: AppViewModel) {
+    var expanded by remember { mutableStateOf(false) }
+    val displayName = piece.name.ifBlank { "Mebel" }
+
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(12.dp)) {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("Mebel", modifier = Modifier.weight(1f))
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    displayName,
+                    modifier = Modifier.weight(1f),
+                    style = MaterialTheme.typography.titleSmall
+                )
+                Text(
+                    "${piece.widthMm}x${piece.heightMm}x${piece.depthMm}",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                IconButton(onClick = { expanded = !expanded }) {
+                    Icon(
+                        if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+                        contentDescription = if (expanded) "Zwiń" else "Rozwiń"
+                    )
+                }
                 IconButton(onClick = { vm.removeFurniturePiece(piece.id) }) {
                     Icon(Icons.Filled.Delete, contentDescription = "Usuń")
                 }
             }
-            CabinetTypeDropdown(
-                value = piece.cabinetType,
-                onSelect = { vm.updateFurnitureCabinetType(piece.id, it) },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(Modifier.height(8.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+
+            if (expanded) {
+                Spacer(Modifier.height(8.dp))
                 OutlinedTextField(
-                    value = piece.widthMm.toString(),
-                    onValueChange = { vm.updateFurnitureWidth(piece.id, it) },
-                    label = { Text("Szer.") },
-                    modifier = Modifier.weight(1f)
+                    value = piece.name,
+                    onValueChange = { vm.updateFurnitureName(piece.id, it) },
+                    label = { Text("Nazwa mebla") },
+                    modifier = Modifier.fillMaxWidth()
                 )
-                OutlinedTextField(
-                    value = piece.heightMm.toString(),
-                    onValueChange = { vm.updateFurnitureHeight(piece.id, it) },
-                    label = { Text("Wys.") },
-                    modifier = Modifier.weight(1f)
+                Spacer(Modifier.height(8.dp))
+                CabinetTypeDropdown(
+                    value = piece.cabinetType,
+                    onSelect = { vm.updateFurnitureCabinetType(piece.id, it) },
+                    modifier = Modifier.fillMaxWidth()
                 )
-                OutlinedTextField(
-                    value = piece.depthMm.toString(),
-                    onValueChange = { vm.updateFurnitureDepth(piece.id, it) },
-                    label = { Text("Głęb.") },
-                    modifier = Modifier.weight(1f)
-                )
+                Spacer(Modifier.height(8.dp))
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    OutlinedTextField(
+                        value = piece.widthMm.toString(),
+                        onValueChange = { vm.updateFurnitureWidth(piece.id, it) },
+                        label = { Text("Szer.") },
+                        modifier = Modifier.weight(1f)
+                    )
+                    OutlinedTextField(
+                        value = piece.heightMm.toString(),
+                        onValueChange = { vm.updateFurnitureHeight(piece.id, it) },
+                        label = { Text("Wys.") },
+                        modifier = Modifier.weight(1f)
+                    )
+                    OutlinedTextField(
+                        value = piece.depthMm.toString(),
+                        onValueChange = { vm.updateFurnitureDepth(piece.id, it) },
+                        label = { Text("Głęb.") },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+                Spacer(Modifier.height(8.dp))
+                Text("Strefy:")
+                piece.elements.forEach { element ->
+                    FurnitureElementRow(piece, element, vm)
+                }
+                ElementTypePickerRow { type -> vm.addElementToFurniture(piece.id, type) }
             }
-            Spacer(Modifier.height(8.dp))
-            Text("Strefy:")
-            piece.elements.forEach { element ->
-                FurnitureElementRow(piece, element, vm)
-            }
-            ElementTypePickerRow { type -> vm.addElementToFurniture(piece.id, type) }
         }
     }
 }
