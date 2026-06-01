@@ -1,5 +1,6 @@
 package com.example.cabinetconfigurator.domain.engine
 
+import com.example.cabinetconfigurator.domain.model.AccessoryType
 import com.example.cabinetconfigurator.domain.model.CalculationLine
 import com.example.cabinetconfigurator.domain.model.ElementType
 import com.example.cabinetconfigurator.domain.model.QuoteCalculationResult
@@ -9,12 +10,12 @@ import kotlin.math.round
 object CalculationKeys {
     const val BOARD_PRICE_PER_M2 = "BOARD_PRICE_PER_M2"
     const val FRONT_PRICE_PER_M2 = "FRONT_PRICE_PER_M2"
-    const val HINGE_PRICE_PER_PCS = "HINGE_PRICE_PER_PCS"
-    const val DRAWER_RUNNER_PRICE_PER_PCS = "DRAWER_RUNNER_PRICE_PER_PCS"
     const val LABOR_RATE_PER_HOUR = "LABOR_RATE_PER_HOUR"
     const val LABOR_HOURS_PER_ZONE = "LABOR_HOURS_PER_ZONE"
     const val MARGIN_PERCENT = "MARGIN_PERCENT"
     const val VAT_PERCENT = "VAT_PERCENT"
+
+    fun accessoryPriceKey(manufacturer: String, model: String) = "ACC::$manufacturer::$model"
 }
 
 interface CalculationEngine {
@@ -28,8 +29,6 @@ class DefaultCalculationEngine : CalculationEngine {
 
         val boardPricePerM2 = decimal(CalculationKeys.BOARD_PRICE_PER_M2)
         val frontPricePerM2 = decimal(CalculationKeys.FRONT_PRICE_PER_M2)
-        val hingePricePerPcs = decimal(CalculationKeys.HINGE_PRICE_PER_PCS)
-        val drawerRunnerPricePerPcs = decimal(CalculationKeys.DRAWER_RUNNER_PRICE_PER_PCS)
         val laborRatePerHour = decimal(CalculationKeys.LABOR_RATE_PER_HOUR)
         val laborHoursPerZone = decimal(CalculationKeys.LABOR_HOURS_PER_ZONE)
         val marginPercent = decimal(CalculationKeys.MARGIN_PERCENT)
@@ -37,42 +36,56 @@ class DefaultCalculationEngine : CalculationEngine {
 
         var totalBoardArea = 0.0
         var totalFrontArea = 0.0
-        var totalHingeCount = 0
-        var totalDrawerRunnerCount = 0
         var totalZones = 0
+        // key: (type, manufacturer, model), value: (totalQty, totalCost)
+        val accessoryCostByModel = mutableMapOf<Triple<AccessoryType, String, String>, Pair<Int, Double>>()
 
         draft.furniture.forEach { piece ->
             val wM = piece.widthMm / 1000.0
             val hM = piece.heightMm / 1000.0
             val dM = piece.depthMm / 1000.0
 
-            // Simple cabinet calculation: 2 sides, top, bottom, back, shelves
-            // For now, let's keep the user's formula but applied per piece
             totalBoardArea += (2 * hM * dM) + (4 * wM * dM) + (wM * hM)
-            
+
             piece.elements.forEach { element ->
                 totalZones++
+                element.accessories.forEach { acc ->
+                    val priceKey = CalculationKeys.accessoryPriceKey(acc.manufacturer, acc.model)
+                    val price = decimal(priceKey)
+                    val key = Triple(acc.type, acc.manufacturer, acc.model)
+                    val (prevQty, prevCost) = accessoryCostByModel[key] ?: (0 to 0.0)
+                    accessoryCostByModel[key] = (prevQty + acc.quantity) to (prevCost + acc.quantity * price)
+                }
                 if (element.type == ElementType.FRONT) {
-                    totalFrontArea += (wM * hM) / piece.elements.count { it.type == ElementType.FRONT }.coerceAtLeast(1)
-                    totalHingeCount += element.hingeCount
-                } else if (element.type == ElementType.DRAWER) {
-                    totalDrawerRunnerCount += element.drawerRunnerCount
+                    val frontsCount = piece.elements.filter { it.type == ElementType.FRONT }.sumOf { it.quantity }
+                    val frontHeightM = if (element.heightMm != null) {
+                        element.heightMm / 1000.0
+                    } else {
+                        hM / frontsCount.coerceAtLeast(1)
+                    }
+                    totalFrontArea += (wM * frontHeightM) * element.quantity
                 }
             }
         }
 
         val boardArea = round2(totalBoardArea)
         val frontArea = round2(totalFrontArea)
-        val hingeCount = totalHingeCount
-        val drawerRunnerCount = totalDrawerRunnerCount
         val laborHours = totalZones * laborHoursPerZone
 
         val boardCost = round2(boardArea * boardPricePerM2)
         val frontCost = round2(frontArea * frontPricePerM2)
-        val hingeCost = round2(hingeCount * hingePricePerPcs)
-        val drawerCost = round2(drawerRunnerCount * drawerRunnerPricePerPcs)
         val laborCost = round2(laborHours * laborRatePerHour)
-        val subtotal = round2(boardCost + frontCost + hingeCost + drawerCost + laborCost)
+
+        val accessoryLines = accessoryCostByModel.entries.mapIndexed { i, (key, qtyAndCost) ->
+            val (type, mfr, mdl) = key
+            val (qty, cost) = qtyAndCost
+            val label = if (mfr.isNotBlank() && mdl.isNotBlank()) "$mfr – $mdl" else type.displayName
+            val price = decimal(CalculationKeys.accessoryPriceKey(mfr, mdl))
+            CalculationLine("ACC_$i", label, round2(cost), qty.toDouble(), "szt", price)
+        }
+
+        val totalAccessoryCost = round2(accessoryLines.sumOf { it.amount })
+        val subtotal = round2(boardCost + frontCost + totalAccessoryCost + laborCost)
         val marginAmount = round2(subtotal * (marginPercent / 100.0))
         val totalNet = round2(subtotal + marginAmount)
         val totalGross = round2(totalNet * (1.0 + vatPercent / 100.0))
@@ -88,14 +101,13 @@ class DefaultCalculationEngine : CalculationEngine {
             totalNet = totalNet,
             totalGross = totalGross,
             warnings = warnings,
-            lines = listOf(
-                CalculationLine("BOARD", "Płyty", boardCost, boardArea, "m²", boardPricePerM2),
-                CalculationLine("FRONT", "Fronty", frontCost, frontArea, "m²", frontPricePerM2),
-                CalculationLine("HINGE", "Zawiasy", hingeCost, hingeCount.toDouble(), "szt", hingePricePerPcs),
-                CalculationLine("DRAWER", "Prowadnice", drawerCost, drawerRunnerCount.toDouble(), "szt", drawerRunnerPricePerPcs),
-                CalculationLine("LABOR", "Robocizna", laborCost, laborHours, "h", laborRatePerHour),
-                CalculationLine("MARGIN", "Marża", marginAmount, marginPercent, "%", null)
-            )
+            lines = buildList {
+                add(CalculationLine("BOARD", "Płyty", boardCost, boardArea, "m²", boardPricePerM2))
+                add(CalculationLine("FRONT", "Fronty", frontCost, frontArea, "m²", frontPricePerM2))
+                addAll(accessoryLines)
+                add(CalculationLine("LABOR", "Robocizna", laborCost, laborHours, "h", laborRatePerHour))
+                add(CalculationLine("MARGIN", "Marża", marginAmount, marginPercent, "%", null))
+            }
         )
     }
 

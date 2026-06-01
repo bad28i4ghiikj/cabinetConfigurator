@@ -64,7 +64,8 @@ data class QuoteZoneEntity(
     val quoteId: Long,
     val name: String,
     val orderIndex: Int,
-    val quantity: Int
+    val quantity: Int,
+    val accessoriesJson: String = "[]"
 )
 
 @Entity(
@@ -84,4 +85,38 @@ data class QuotePricingSnapshotEntity(
     val quoteId: Long,
     val parameterKey: String,
     val value: String
+)
+
+@Entity(tableName = "cabinet_templates")
+data class CabinetTemplateEntity(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0L,
+    val name: String,
+    val cabinetType: String,
+    val widthMm: Int,
+    val heightMm: Int,
+    val depthMm: Int
+)
+
+@Entity(
+    tableName = "cabinet_template_elements",
+    foreignKeys = [
+        ForeignKey(
+            entity = CabinetTemplateEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["templateId"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ],
+    indices = [Index("templateId")]
+)
+data class CabinetTemplateElementEntity(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0L,
+    val templateId: Long,
+    val type: String,
+    val quantity: Int,
+    val accessoriesJson: String = "[]",
+    val widthMm: Int?,
+    val heightMm: Int?,
+    val depthMm: Int?,
+    val orderIndex: Int
 )

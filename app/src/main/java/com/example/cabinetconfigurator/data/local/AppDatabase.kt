@@ -12,14 +12,17 @@ import androidx.room.RoomDatabase
         PricingParameterValueEntity::class,
         QuoteEntity::class,
         QuoteZoneEntity::class,
-        QuotePricingSnapshotEntity::class
+        QuotePricingSnapshotEntity::class,
+        CabinetTemplateEntity::class,
+        CabinetTemplateElementEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun pricingDao(): PricingDao
     abstract fun quoteDao(): QuoteDao
+    abstract fun templateDao(): TemplateDao
 
     companion object {
         @Volatile private var INSTANCE: AppDatabase? = null
@@ -30,7 +33,7 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "cabinet_configurator.db"
-                ).build().also { INSTANCE = it }
+                ).fallbackToDestructiveMigration().build().also { INSTANCE = it }
             }
         }
     }
