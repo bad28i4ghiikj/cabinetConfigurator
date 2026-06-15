@@ -18,7 +18,7 @@
    ```
    Copy the SHA-1 value from `debug` build variant
 4. Download `google-services.json`
-5. Place it in `app/` directory (replace the template file)
+5. Place it in `app/` directory
 
 ## 3. Enable Firebase Services
 
@@ -66,57 +66,106 @@ service firebase.storage {
 }
 ```
 
-## 5. Integration in Code
+## 5. Usage in Code
 
-### Usage Example
+Firebase is initialized automatically when the app starts. Use Firebase classes directly:
 
+### Authentication
 ```kotlin
-// Initialize Firebase (done automatically in MainActivity)
-FirebaseModule.initialize()
+import com.google.firebase.auth.FirebaseAuth
 
-// Get managers
-val authManager = FirebaseModule.getAuthManager()
-val firestoreManager = FirebaseModule.getFirestoreManager()
-val storageManager = FirebaseModule.getStorageManager()
+val auth = FirebaseAuth.getInstance()
+
+// Register
+auth.createUserWithEmailAndPassword(email, password)
+    .addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+            val user = auth.currentUser
+        }
+    }
 
 // Login
-val success = authManager.loginWithEmail("user@example.com", "password")
+auth.signInWithEmailAndPassword(email, password)
+    .addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+            val user = auth.currentUser
+        }
+    }
 
-// Upload quote to Firestore
-firestoreManager.uploadQuote(quote)
+// Logout
+auth.signOut()
 
-// Upload PDF to Storage
-storageManager.uploadPdf(pdfFile, quoteId)
-
-// Observe cloud quotes
-firestoreManager.observeCloudQuotes().collect { quotes ->
-    // Handle quotes
-}
+// Get current user
+val user = FirebaseAuth.getInstance().currentUser
+val uid = user?.uid
+val email = user?.email
+val displayName = user?.displayName
 ```
 
-## 6. Available Features
+### Firestore
+```kotlin
+import com.google.firebase.firestore.FirebaseFirestore
 
-### FirebaseAuthManager
-- `registerWithEmail(email, password, displayName)` - Register new user
-- `loginWithEmail(email, password)` - Login user
-- `logout()` - Logout current user
-- `getUid()` - Get current user UID
-- `getEmail()` - Get current user email
-- `getDisplayName()` - Get current user display name
+val db = FirebaseFirestore.getInstance()
 
-### FirebaseFirestoreManager
-- `uploadQuote(quote)` - Save quote to cloud
-- `deleteQuoteFromCloud(quoteId)` - Delete quote from cloud
-- `observeCloudQuotes()` - Real-time quote sync
+// Write document
+db.collection("quotes").document(quoteId).set(quoteData)
+    .addOnSuccessListener { }
+    .addOnFailureListener { }
 
-### FirebaseStorageManager
-- `uploadPdf(pdfFile, quoteId)` - Upload PDF to cloud
-- `downloadPdf(fileName)` - Download PDF
-- `listUserPdfs()` - List all user PDFs
-- `deletePdf(fileName)` - Delete PDF
-- `getPdfDownloadUrl(fileName)` - Get public download URL
+// Read document
+db.collection("quotes").document(quoteId).get()
+    .addOnSuccessListener { document ->
+        val quote = document.toObject(Quote::class.java)
+    }
 
-## 7. Troubleshooting
+// Delete document
+db.collection("quotes").document(quoteId).delete()
+
+// Real-time listener
+db.collection("quotes").whereEqualTo("uid", uid)
+    .addSnapshotListener { snapshot, error ->
+        if (error == null && snapshot != null) {
+            val quotes = snapshot.toObjects(Quote::class.java)
+        }
+    }
+```
+
+### Cloud Storage
+```kotlin
+import com.google.firebase.storage.FirebaseStorage
+
+val storage = FirebaseStorage.getInstance()
+
+// Upload file
+val ref = storage.reference.child("pdfs").child(uid).child(fileName)
+ref.putFile(pdfUri)
+    .addOnSuccessListener { }
+    .addOnFailureListener { }
+
+// Download file
+ref.getBytes(Long.MAX_VALUE)
+    .addOnSuccessListener { bytes ->
+        // Use bytes
+    }
+
+// List files
+storage.reference.child("pdfs").child(uid).listAll()
+    .addOnSuccessListener { result ->
+        val items = result.items
+    }
+
+// Delete file
+ref.delete()
+
+// Get download URL
+ref.downloadUrl
+    .addOnSuccessListener { uri ->
+        val url = uri.toString()
+    }
+```
+
+## Troubleshooting
 
 **"google-services.json is required"**
 - Download the file from Firebase Console and place in `app/` directory

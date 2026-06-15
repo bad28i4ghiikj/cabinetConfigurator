@@ -8,7 +8,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.cabinetconfigurator.di.AppModule
-import com.example.cabinetconfigurator.firebase.FirebaseModule
 import com.example.cabinetconfigurator.ui.AppRoot
 import com.example.cabinetconfigurator.ui.viewmodel.AppViewModel
 import com.example.cabinetconfigurator.ui.viewmodel.AppViewModelFactory
@@ -18,7 +17,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        FirebaseModule.initialize()
         val module = AppModule.get(applicationContext)
 
         setContent {
