@@ -12,8 +12,8 @@ import android.net.Uri
 import coil.ImageLoader
 import coil.request.ImageRequest
 import coil.request.SuccessResult
-import com.example.cabinetconfigurator.domain.model.Quote
-import com.example.cabinetconfigurator.domain.model.QuoteCalculationResult
+import com.company.cabinetConfigurator.domain.model.Quote
+import com.company.cabinetConfigurator.domain.model.QuoteCalculationResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File

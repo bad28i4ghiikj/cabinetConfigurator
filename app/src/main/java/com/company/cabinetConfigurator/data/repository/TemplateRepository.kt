@@ -1,11 +1,11 @@
 package com.company.cabinetConfigurator.data.repository
 
-import com.example.cabinetconfigurator.data.local.CabinetTemplateElementEntity
-import com.example.cabinetconfigurator.data.local.CabinetTemplateEntity
-import com.example.cabinetconfigurator.data.local.TemplateDao
-import com.example.cabinetconfigurator.domain.model.CabinetTemplate
-import com.example.cabinetconfigurator.domain.model.ElementType
-import com.example.cabinetconfigurator.domain.model.FurnitureElement
+import com.company.cabinetConfigurator.data.local.CabinetTemplateElementEntity
+import com.company.cabinetConfigurator.data.local.CabinetTemplateEntity
+import com.company.cabinetConfigurator.data.local.TemplateDao
+import com.company.cabinetConfigurator.domain.model.CabinetTemplate
+import com.company.cabinetConfigurator.domain.model.ElementType
+import com.company.cabinetConfigurator.domain.model.FurnitureElement
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

@@ -1,24 +1,24 @@
 package com.company.cabinetConfigurator.di
 
 import android.content.Context
-import com.example.cabinetconfigurator.data.local.AppDatabase
-import com.example.cabinetconfigurator.data.repository.PricingRepository
-import com.example.cabinetconfigurator.data.repository.QuoteRepository
-import com.example.cabinetconfigurator.data.repository.TemplateRepository
-import com.example.cabinetconfigurator.data.repository.UserSettingsRepository
-import com.example.cabinetconfigurator.domain.pdf.PdfGenerator
-import com.example.cabinetconfigurator.domain.engine.DefaultCalculationEngine
-import com.example.cabinetconfigurator.domain.usecase.CalculateQuoteUseCase
-import com.example.cabinetconfigurator.domain.usecase.DeleteQuoteUseCase
-import com.example.cabinetconfigurator.domain.usecase.EnsureSeedDataUseCase
-import com.example.cabinetconfigurator.domain.usecase.EnsureSeedTemplatesUseCase
-import com.example.cabinetconfigurator.domain.usecase.GetActivePricingProfileUseCase
-import com.example.cabinetconfigurator.domain.usecase.GetParameterDefinitionsUseCase
-import com.example.cabinetconfigurator.domain.usecase.ObserveCabinetTemplatesUseCase
-import com.example.cabinetconfigurator.domain.usecase.ObserveQuoteHistoryUseCase
-import com.example.cabinetconfigurator.domain.usecase.SaveCabinetTemplateUseCase
-import com.example.cabinetconfigurator.domain.usecase.SaveQuoteUseCase
-import com.example.cabinetconfigurator.domain.usecase.UpdatePricingParameterUseCase
+import com.company.cabinetConfigurator.data.local.AppDatabase
+import com.company.cabinetConfigurator.data.repository.PricingRepository
+import com.company.cabinetConfigurator.data.repository.QuoteRepository
+import com.company.cabinetConfigurator.data.repository.TemplateRepository
+import com.company.cabinetConfigurator.data.repository.UserSettingsRepository
+import com.company.cabinetConfigurator.domain.pdf.PdfGenerator
+import com.company.cabinetConfigurator.domain.engine.DefaultCalculationEngine
+import com.company.cabinetConfigurator.domain.usecase.CalculateQuoteUseCase
+import com.company.cabinetConfigurator.domain.usecase.DeleteQuoteUseCase
+import com.company.cabinetConfigurator.domain.usecase.EnsureSeedDataUseCase
+import com.company.cabinetConfigurator.domain.usecase.EnsureSeedTemplatesUseCase
+import com.company.cabinetConfigurator.domain.usecase.GetActivePricingProfileUseCase
+import com.company.cabinetConfigurator.domain.usecase.GetParameterDefinitionsUseCase
+import com.company.cabinetConfigurator.domain.usecase.ObserveCabinetTemplatesUseCase
+import com.company.cabinetConfigurator.domain.usecase.ObserveQuoteHistoryUseCase
+import com.company.cabinetConfigurator.domain.usecase.SaveCabinetTemplateUseCase
+import com.company.cabinetConfigurator.domain.usecase.SaveQuoteUseCase
+import com.company.cabinetConfigurator.domain.usecase.UpdatePricingParameterUseCase
 
 class AppModule private constructor(context: Context) {
     private val db = AppDatabase.getInstance(context)

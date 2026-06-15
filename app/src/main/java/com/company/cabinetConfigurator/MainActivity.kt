@@ -7,10 +7,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.cabinetconfigurator.di.AppModule
-import com.example.cabinetconfigurator.ui.AppRoot
-import com.example.cabinetconfigurator.ui.viewmodel.AppViewModel
-import com.example.cabinetconfigurator.ui.viewmodel.AppViewModelFactory
+import com.company.cabinetConfigurator.di.AppModule
+import com.company.cabinetConfigurator.ui.AppRoot
+import com.company.cabinetConfigurator.ui.viewmodel.AppViewModel
+import com.company.cabinetConfigurator.ui.viewmodel.AppViewModelFactory
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

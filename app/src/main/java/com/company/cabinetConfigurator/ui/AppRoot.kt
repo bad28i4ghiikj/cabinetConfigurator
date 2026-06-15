@@ -73,19 +73,19 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import coil.compose.rememberAsyncImagePainter
-import com.example.cabinetconfigurator.domain.engine.CalculationKeys
-import com.example.cabinetconfigurator.domain.model.Accessory
-import com.example.cabinetconfigurator.domain.model.AccessoryCatalog
-import com.example.cabinetconfigurator.domain.model.AccessoryType
-import com.example.cabinetconfigurator.domain.model.CabinetType
-import com.example.cabinetconfigurator.domain.model.CalculationLine
-import com.example.cabinetconfigurator.domain.model.ElementType
-import com.example.cabinetconfigurator.domain.model.FurnitureElement
-import com.example.cabinetconfigurator.domain.model.FurniturePiece
-import com.example.cabinetconfigurator.domain.model.Quote
-import com.example.cabinetconfigurator.ui.viewmodel.AppTab
-import com.example.cabinetconfigurator.ui.viewmodel.AppUiState
-import com.example.cabinetconfigurator.ui.viewmodel.AppViewModel
+import com.company.cabinetConfigurator.domain.engine.CalculationKeys
+import com.company.cabinetConfigurator.domain.model.Accessory
+import com.company.cabinetConfigurator.domain.model.AccessoryCatalog
+import com.company.cabinetConfigurator.domain.model.AccessoryType
+import com.company.cabinetConfigurator.domain.model.CabinetType
+import com.company.cabinetConfigurator.domain.model.CalculationLine
+import com.company.cabinetConfigurator.domain.model.ElementType
+import com.company.cabinetConfigurator.domain.model.FurnitureElement
+import com.company.cabinetConfigurator.domain.model.FurniturePiece
+import com.company.cabinetConfigurator.domain.model.Quote
+import com.company.cabinetConfigurator.ui.viewmodel.AppTab
+import com.company.cabinetConfigurator.ui.viewmodel.AppUiState
+import com.company.cabinetConfigurator.ui.viewmodel.AppViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -1,18 +1,18 @@
 package com.company.cabinetConfigurator.domain.usecase
 
-import com.example.cabinetconfigurator.data.repository.PricingRepository
-import com.example.cabinetconfigurator.data.repository.QuoteRepository
-import com.example.cabinetconfigurator.data.repository.TemplateRepository
-import com.example.cabinetconfigurator.domain.engine.CalculationEngine
-import com.example.cabinetconfigurator.domain.engine.CalculationKeys
-import com.example.cabinetconfigurator.domain.model.ParameterDefinition
-import com.example.cabinetconfigurator.domain.model.ParameterValueType
-import com.example.cabinetconfigurator.domain.model.PricingCategory
-import com.example.cabinetconfigurator.domain.model.PricingProfile
-import com.example.cabinetconfigurator.domain.model.CabinetTemplate
-import com.example.cabinetconfigurator.domain.model.Quote
-import com.example.cabinetconfigurator.domain.model.QuoteCalculationResult
-import com.example.cabinetconfigurator.domain.model.QuoteDraft
+import com.company.cabinetConfigurator.data.repository.PricingRepository
+import com.company.cabinetConfigurator.data.repository.QuoteRepository
+import com.company.cabinetConfigurator.data.repository.TemplateRepository
+import com.company.cabinetConfigurator.domain.engine.CalculationEngine
+import com.company.cabinetConfigurator.domain.engine.CalculationKeys
+import com.company.cabinetConfigurator.domain.model.ParameterDefinition
+import com.company.cabinetConfigurator.domain.model.ParameterValueType
+import com.company.cabinetConfigurator.domain.model.PricingCategory
+import com.company.cabinetConfigurator.domain.model.PricingProfile
+import com.company.cabinetConfigurator.domain.model.CabinetTemplate
+import com.company.cabinetConfigurator.domain.model.Quote
+import com.company.cabinetConfigurator.domain.model.QuoteCalculationResult
+import com.company.cabinetConfigurator.domain.model.QuoteDraft
 import kotlinx.coroutines.flow.Flow
 
 internal val PRICING_PARAMETER_DEFINITIONS = listOf(

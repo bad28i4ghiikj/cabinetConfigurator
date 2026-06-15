@@ -1,10 +1,10 @@
 package com.company.cabinetConfigurator.domain.engine
 
-import com.example.cabinetconfigurator.domain.model.AccessoryType
-import com.example.cabinetconfigurator.domain.model.CalculationLine
-import com.example.cabinetconfigurator.domain.model.ElementType
-import com.example.cabinetconfigurator.domain.model.QuoteCalculationResult
-import com.example.cabinetconfigurator.domain.model.QuoteDraft
+import com.company.cabinetConfigurator.domain.model.AccessoryType
+import com.company.cabinetConfigurator.domain.model.CalculationLine
+import com.company.cabinetConfigurator.domain.model.ElementType
+import com.company.cabinetConfigurator.domain.model.QuoteCalculationResult
+import com.company.cabinetConfigurator.domain.model.QuoteDraft
 import kotlin.math.round
 
 object CalculationKeys {

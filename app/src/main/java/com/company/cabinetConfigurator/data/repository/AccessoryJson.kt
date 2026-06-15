@@ -1,7 +1,7 @@
 package com.company.cabinetConfigurator.data.repository
 
-import com.example.cabinetconfigurator.domain.model.Accessory
-import com.example.cabinetconfigurator.domain.model.AccessoryType
+import com.company.cabinetConfigurator.domain.model.Accessory
+import com.company.cabinetConfigurator.domain.model.AccessoryType
 import org.json.JSONArray
 import org.json.JSONObject
 
