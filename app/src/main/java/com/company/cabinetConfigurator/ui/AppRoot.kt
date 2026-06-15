@@ -1,4 +1,4 @@
-package com.example.cabinetconfigurator.ui
+package com.company.cabinetConfigurator.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image

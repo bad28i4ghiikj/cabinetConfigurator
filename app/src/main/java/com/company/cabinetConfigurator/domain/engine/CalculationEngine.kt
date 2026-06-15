@@ -1,4 +1,4 @@
-package com.example.cabinetconfigurator.domain.engine
+package com.company.cabinetConfigurator.domain.engine
 
 import com.example.cabinetconfigurator.domain.model.AccessoryType
 import com.example.cabinetconfigurator.domain.model.CalculationLine

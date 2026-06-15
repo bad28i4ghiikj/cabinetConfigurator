@@ -1,4 +1,4 @@
-package com.example.cabinetconfigurator.data.local
+package com.company.cabinetConfigurator.data.local
 
 import androidx.room.Entity
 import androidx.room.ForeignKey

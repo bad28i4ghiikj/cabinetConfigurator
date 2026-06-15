@@ -1,4 +1,4 @@
-package com.example.cabinetconfigurator.data.repository
+package com.company.cabinetConfigurator.data.repository
 
 import android.content.Context
 import android.net.Uri

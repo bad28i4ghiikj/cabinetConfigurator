@@ -1,4 +1,4 @@
-package com.example.cabinetconfigurator.domain.model
+package com.company.cabinetConfigurator.domain.model
 
 data class AccessoryCatalogEntry(
     val manufacturer: String,

@@ -1,4 +1,4 @@
-package com.example.cabinetconfigurator.data.repository
+package com.company.cabinetConfigurator.data.repository
 
 import com.example.cabinetconfigurator.data.local.ParameterDefinitionEntity
 import com.example.cabinetconfigurator.data.local.PricingDao

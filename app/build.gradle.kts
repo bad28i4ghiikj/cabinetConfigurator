@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.cabinetconfigurator"
+    namespace = "com.company.cabinetConfigurator"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.cabinetconfigurator"
+        applicationId = "com.company.cabinetConfigurator"
         minSdk = 26
         targetSdk = 34
         versionCode = 1

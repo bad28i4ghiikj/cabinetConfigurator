@@ -1,4 +1,4 @@
-package com.example.cabinetconfigurator.data.repository
+package com.company.cabinetConfigurator.data.repository
 
 import com.example.cabinetconfigurator.domain.model.Accessory
 import com.example.cabinetconfigurator.domain.model.AccessoryType

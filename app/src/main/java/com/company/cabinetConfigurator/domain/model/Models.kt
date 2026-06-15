@@ -1,4 +1,4 @@
-package com.example.cabinetconfigurator.domain.model
+package com.company.cabinetConfigurator.domain.model
 
 import java.util.UUID
 

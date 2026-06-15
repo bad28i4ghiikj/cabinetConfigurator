@@ -1,4 +1,4 @@
-package com.example.cabinetconfigurator.di
+package com.company.cabinetConfigurator.di
 
 import android.content.Context
 import com.example.cabinetconfigurator.data.local.AppDatabase

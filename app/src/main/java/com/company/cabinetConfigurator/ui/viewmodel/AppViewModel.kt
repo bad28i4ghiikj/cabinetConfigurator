@@ -1,4 +1,4 @@
-package com.example.cabinetconfigurator.ui.viewmodel
+package com.company.cabinetConfigurator.ui.viewmodel
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel

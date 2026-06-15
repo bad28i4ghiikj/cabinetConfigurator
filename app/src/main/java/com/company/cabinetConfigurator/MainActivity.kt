@@ -1,4 +1,4 @@
-package com.example.cabinetconfigurator
+package com.company.cabinetConfigurator
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

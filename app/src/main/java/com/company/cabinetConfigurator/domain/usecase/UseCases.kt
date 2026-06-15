@@ -1,4 +1,4 @@
-package com.example.cabinetconfigurator.domain.usecase
+package com.company.cabinetConfigurator.domain.usecase
 
 import com.example.cabinetconfigurator.data.repository.PricingRepository
 import com.example.cabinetconfigurator.data.repository.QuoteRepository

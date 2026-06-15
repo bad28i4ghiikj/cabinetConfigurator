@@ -1,4 +1,4 @@
-package com.example.cabinetconfigurator.domain.pdf
+package com.company.cabinetConfigurator.domain.pdf
 
 import android.content.Context
 import android.graphics.Bitmap
