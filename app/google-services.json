@@ -1,41 +1,26 @@
 {
   "project_info": {
-    "project_number": "YOUR_PROJECT_NUMBER",
-    "project_id": "your-project-id",
-    "storage_bucket": "your-project-id.appspot.com"
+    "project_number": "111254422692",
+    "project_id": "cabinetconfigurator",
+    "storage_bucket": "cabinetconfigurator.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:YOUR_PROJECT_NUMBER:android:YOUR_APP_ID",
-        "client_type": 1,
+        "mobilesdk_app_id": "1:111254422692:android:6920c85d6e488e496c1231",
         "android_client_info": {
-          "package_name": "com.example.cabinetconfigurator"
+          "package_name": "com.company.cabinetConfigurator"
         }
       },
-      "oauth_client": [
-        {
-          "client_type": 3,
-          "client_id": "YOUR_WEB_CLIENT_ID.apps.googleusercontent.com",
-          "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-          "token_uri": "https://oauth2.googleapis.com/token",
-          "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-          "client_secret": "YOUR_CLIENT_SECRET"
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "YOUR_API_KEY"
+          "current_key": "AIzaSyBgAZtRfm1xLP67iPC5f1me_JCOy739zyc"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_type": 3,
-              "client_id": "YOUR_WEB_CLIENT_ID.apps.googleusercontent.com"
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
