@@ -17,6 +17,7 @@ import com.company.cabinetConfigurator.domain.model.QuoteCalculationResult
 import com.company.cabinetConfigurator.domain.model.QuoteDraft
 import com.company.cabinetConfigurator.domain.model.FurnitureElement
 import com.company.cabinetConfigurator.domain.model.FurniturePiece
+import com.company.cabinetConfigurator.domain.model.ElementType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
@@ -121,8 +122,8 @@ class QuoteRepository(private val dao: QuoteDao) {
                         val parts = zone.name.split(" - ").map { it.trim() }
                         if (parts.size >= 2) {
                             val elementType = when (parts[1]) {
-                                "FRONT"  -> com.example.cabinetconfigurator.domain.model.ElementType.FRONT
-                                "DRAWER" -> com.example.cabinetconfigurator.domain.model.ElementType.DRAWER
+                                "FRONT"  -> ElementType.FRONT
+                                "DRAWER" -> ElementType.DRAWER
                                 else     -> null
                             }
                             elementType?.let {
